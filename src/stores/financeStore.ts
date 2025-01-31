@@ -58,14 +58,17 @@ export const useFinanceStore = defineStore('finance', {
     },
 
     filterTransactionsByDate(startDate: string, endDate: string): Transaction[] {
-      const start = new Date(startDate).getTime();
-      const end = new Date(endDate).getTime();
+      const start = new Date(startDate);
+      start.setUTCHours(0, 0, 0, 0); // Set time to midnight UTC
+      const end = new Date(endDate);
+      end.setUTCHours(23, 59, 59, 999); // Set end time to last millisecond of the day UTC
+    
       return this.transactions.filter(({ date }) => {
         const transactionDate = new Date(date).getTime();
-        return transactionDate >= start && transactionDate <= end;
+        return transactionDate >= start.getTime() && transactionDate <= end.getTime();
       });
     },
-
+    
     calculateTotalsForPeriod(startDate: string, endDate: string): { totalIncome: number; totalExpenses: number; netSavings: number } {
       const filteredTransactions = this.filterTransactionsByDate(startDate, endDate);
       
