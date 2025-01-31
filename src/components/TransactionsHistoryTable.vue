@@ -15,7 +15,13 @@
           R$ {{ scope.row.amount.toFixed(2) }}
         </template>
       </el-table-column>
-      <el-table-column label="Type" prop="type" sortable />
+      <el-table-column label="Type" prop="type" sortable>
+        <template #default="scope">
+          <el-tag :type="scope.row.type === 'income' ? 'success' : 'danger'">
+            {{ scope.row.type }}
+          </el-tag>
+        </template>
+      </el-table-column>
       
       <el-table-column align="right">
         <template #header>
